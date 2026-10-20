@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Interactive Quiz - Grade 8 Narrative Text</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            purple: '#6C5CE7',
+                            pink: '#FD79A8',
+                            yellow: '#FDCB6E',
+                            teal: '#00CEC9',
+                            blue: '#0984E3',
+                            dark: '#2D3436'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+            min-height: 100vh;
+        }
+        .custom-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .btn-bounce:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-bounce:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-3 sm:p-6 min-h-screen">
+
+    <!-- MAIN CONTAINER -->
+    <div id="app" class="w-full max-w-4xl custom-card p-4 sm:p-8 relative overflow-hidden transition-all duration-300">
+        
+        <!-- ==================== CONFIGURATION CONSTANTS ==================== -->
+        <script>
+            // SILAKAN MASUKKAN URL GOOGLE APPS SCRIPT (GAS) ANDA DI BAWAH INI
+            const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOtn37YDirJqK2rlwFuThBiDF_MoRGKirz6FAZxijVrTKtdeBgFSXHXPTSJK8hto4P/exec"; 
+            
+            // PASSCODE MASUK GAME (Dapat disesuaikan)
+            const GAME_PASSCODE = "ENGLISH8";
+            
+            // DURASI GAME DALAM DETIK (60 Menit = 3600 Detik)
+            const TOTAL_TIME_SECONDS = 3600;
+        </script>
+
+        <!-- ==================== SCREEN 1: LOGIN & WELCOME ==================== -->
+        <div id="screen-welcome" class="space-y-6 text-center py-4">
+            <div class="inline-block p-4 bg-purple-100 rounded-full text-brand-purple mb-2 animate-bounce">
+                <i class="fa-solid fa-book-open-reader fa-3x"></i>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black font-display text-brand-purple tracking-wide">
+                ENGLISH ADVENTURE! 🌟
+            </h1>
+            <p class="text-gray-600 font-semibold max-w-md mx-auto text-sm sm:text-base">
+                Narrative Text: A Helping Hand & Friendship (Grade 8 - Kurikulum Merdeka)
+            </p>
+
+            <div class="max-w-md mx-auto bg-purple-50/80 p-6 rounded-2xl border-2 border-purple-200 text-left space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Student Name / Nama Lengkap</label>
+                    <input type="text" id="input-name" placeholder="Enter your full name..." class="w-full px-4 py-3 rounded-xl border border-purple-300 focus:outline-none focus:ring-2 focus:ring-brand-purple text-gray-800 font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Class / Kelas</label>
+                    <select id="input-class" class="w-full px-4 py-3 rounded-xl border border-purple-300 focus:outline-none focus:ring-2 focus:ring-brand-purple text-gray-800 font-medium">
+                        <option value="">-- Select Class --</option>
+                        <option value="8-A">8-A</option>
+                        <option value="8-B">8-B</option>
+                        <option value="8-C">8-C</option>
+                        <option value="8-D">8-D</option>
+                        <option value="8-E">8-E</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Access Passcode</label>
+                    <input type="password" id="input-passcode" placeholder="Enter passcode given by teacher..." class="w-full px-4 py-3 rounded-xl border border-purple-300 focus:outline-none focus:ring-2 focus:ring-brand-purple text-gray-800 font-medium">
+                </div>
+            </div>
+
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded-r-xl max-w-md mx-auto text-left text-xs text-amber-800 space-y-1">
+                <p class="font-bold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Exam Rules & Safety:</p>
+                <ul class="list-disc list-inside space-y-0.5">
+                    <li>Duration: 60 Minutes (30 Questions).</li>
+                    <li>Do NOT leave or switch tabs during the test!</li>
+                    <li>3 Violations = Auto Reset to Welcome Screen.</li>
+                </ul>
+            </div>
+
+            <button onclick="startGame()" class="w-full max-w-md bg-brand-purple hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all transform btn-bounce font-display text-lg">
+                START QUIZ GAME <i class="fa-solid fa-rocket ml-2"></i>
+            </button>
+        </div>
+
+        <!-- ==================== SCREEN 2: GAMEPLAY ==================== -->
+        <div id="screen-game" class="hidden space-y-5">
+            <!-- Header Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-3 border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-purple-100 text-brand-purple px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider" id="student-badge">
+                        Student Info
+                    </span>
+                    <span id="violation-counter" class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-shield-cat"></i> Warnings: 0/3
+                    </span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div id="timer-display" class="bg-amber-100 text-amber-800 font-bold px-4 py-1.5 rounded-xl text-sm flex items-center gap-2 border border-amber-300">
+                        <i class="fa-solid fa-clock animate-pulse"></i> <span id="time-left">60:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div>
+                <div class="flex justify-between text-xs font-bold text-gray-500 mb-1">
+                    <span id="question-progress-text">Question 1 of 30</span>
+                    <span id="difficulty-badge" class="px-2 py-0.5 rounded text-white text-[10px] uppercase font-black">Easy</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                    <div id="progress-bar" class="bg-brand-purple h-2.5 rounded-full transition-all duration-300" style="width: 3.33%"></div>
+                </div>
+            </div>
+
+            <!-- Question & Reading Text Box -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 min-h-[380px]">
+                
+                <!-- Left: Reading Text / Context Block -->
+                <div id="text-container" class="lg:col-span-6 bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 overflow-y-auto max-h-[320px] lg:max-h-[420px] text-sm text-gray-700 leading-relaxed space-y-3">
+                    <div class="flex items-center gap-2 text-brand-purple font-bold text-xs uppercase tracking-wide border-b border-gray-200 pb-2">
+                        <i class="fa-solid fa-file-lines"></i> Reading Material / Passage
+                    </div>
+                    <!-- Question Context Image Placeholder -->
+                    <div id="question-image-box" class="hidden my-2">
+                        <img id="question-image" src="" alt="Question Graphic" class="w-full max-h-40 object-cover rounded-xl border">
+                    </div>
+                    <div id="question-text-passage" class="whitespace-pre-line italic text-gray-800">
+                        <!-- Text passage loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Right: Question Prompt & Options -->
+                <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
+                    <div>
+                        <h2 id="question-prompt" class="text-base sm:text-lg font-bold text-gray-800 mb-4 leading-snug">
+                            <!-- Question prompt loaded dynamically -->
+                        </h2>
+
+                        <!-- Options Container -->
+                        <div id="options-container" class="space-y-2.5">
+                            <!-- Options rendered dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-2">
+                        <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-sm transition flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> Previous
+                        </button>
+                        
+                        <button id="btn-grid-modal" onclick="openGridModal()" class="px-3 py-2 bg-purple-50 text-brand-purple hover:bg-purple-100 font-bold rounded-xl text-xs transition">
+                            <i class="fa-solid fa-border-all"></i> Map (1-30)
+                        </button>
+
+                        <button id="btn-next" onclick="nextQuestion()" class="px-5 py-2 bg-brand-purple hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition flex items-center gap-2 btn-bounce">
+                            Next <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                        <button id="btn-submit" onclick="confirmSubmit()" class="hidden px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition btn-bounce">
+                            Finish Quiz <i class="fa-solid fa-check-double ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SCREEN 3: RESULT & SCORE ==================== -->
+        <div id="screen-result" class="hidden text-center space-y-6 py-6">
+            <div class="inline-block p-4 bg-emerald-100 text-emerald-600 rounded-full animate-bounce">
+                <i class="fa-solid fa-trophy fa-3x"></i>
+            </div>
+            
+            <h1 class="text-3xl font-black font-display text-gray-800">QUIZ COMPLETED!</h1>
+            <p class="text-gray-500 text-sm">Great effort! Here is your performance summary.</p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto">
+                <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100">
+                    <span class="block text-xs font-bold text-gray-400 uppercase">Final Score</span>
+                    <span id="result-score" class="text-3xl font-black text-brand-purple">0</span>
+                    <span class="text-[10px] text-gray-400">out of 100</span>
+                </div>
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+                    <span class="block text-xs font-bold text-gray-400 uppercase">Correct</span>
+                    <span id="result-correct" class="text-3xl font-black text-emerald-600">0</span>
+                    <span class="text-[10px] text-gray-400">questions</span>
+                </div>
+                <div class="bg-red-50 p-4 rounded-2xl border border-red-100">
+                    <span class="block text-xs font-bold text-gray-400 uppercase">Incorrect</span>
+                    <span id="result-wrong" class="text-3xl font-black text-red-500">0</span>
+                    <span class="text-[10px] text-gray-400">questions</span>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+                    <span class="block text-xs font-bold text-gray-400 uppercase">Violations</span>
+                    <span id="result-violations" class="text-3xl font-black text-amber-600">0</span>
+                    <span class="text-[10px] text-gray-400">tab switches</span>
+                </div>
+            </div>
+
+            <!-- Detailed Mistake Summary -->
+            <div class="max-w-2xl mx-auto bg-gray-50 p-4 rounded-2xl border border-gray-200 text-left">
+                <h3 class="font-bold text-sm text-gray-700 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-xmark text-red-500"></i> Incorrect Questions List:
+                </h3>
+                <p id="result-wrong-list" class="text-xs text-gray-600 font-mono">None (Perfect Score!)</p>
+            </div>
+
+            <div id="gas-status" class="text-xs text-gray-500 italic">
+                Sending results to teacher's spreadsheet...
+            </div>
+
+            <button onclick="restartApp()" class="px-8 py-3 bg-brand-purple hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition transform btn-bounce font-display">
+                Back to Welcome Screen <i class="fa-solid fa-house ml-2"></i>
+            </button>
+        </div>
+
+        <!-- MODAL: QUESTION MAP -->
+        <div id="modal-grid" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl p-6 max-w-lg w-full space-y-4">
+                <div class="flex justify-between items-center border-b pb-2">
+                    <h3 class="font-bold text-gray-800">Question Navigation Map</h3>
+                    <button onclick="closeGridModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark fa-lg"></i></button>
+                </div>
+                <div id="question-grid-buttons" class="grid grid-cols-6 gap-2 max-h-60 overflow-y-auto p-1">
+                    <!-- Dynamic grid buttons -->
+                </div>
+                <div class="flex justify-end pt-2">
+                    <button onclick="closeGridModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-xl text-xs">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: GENERAL ALERT / NOTIFICATION -->
+        <div id="modal-alert" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4 border-2 border-brand-purple">
+                <div id="modal-alert-icon" class="text-amber-500 text-3xl">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <h3 id="modal-alert-title" class="font-bold text-gray-800 text-base">Notification</h3>
+                <p id="modal-alert-msg" class="text-xs text-gray-600"></p>
+                <button onclick="closeAlertModal()" class="w-full py-2 bg-brand-purple text-white font-bold rounded-xl text-xs">OK, Understood</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC & QUESTION DATABASE ==================== -->
+    <script>
+        
+        // TEMPLATE DUMMY UNTUK GAMBAR (Dapat diisi URL Gambar jika ada)
+        // Format: image: "https://url-gambar.com/image.jpg"
+        
+        const questionBank = [
+            // --- EASY (1 - 10) ---
+            {
+                id: 1,
+                difficulty: "Easy",
+                passage: "Once upon a time, in a small green forest, lived a little rabbit named Bobo. One sunny morning, Bobo found a trapped bird under a fallen branch. Bobo quickly lifted the branch with all his strength and set the bird free. The bird chirped happily and promised to help Bobo whenever he needed it.",
+                question: "What is the main topic of the story above?",
+                options: [
+                    "A rabbit searching for food",
+                    "A helping hand between animals",
+                    "A dangerous forest adventure",
+                    "A bird building a nest"
+                ],
+                answer: 1, // Index 1 = B
+                image: "" // Placeholder URL image
+            },
+            {
+                id: 2,
+                difficulty: "Easy",
+                passage: "Once upon a time, in a small green forest, lived a little rabbit named Bobo. One sunny morning, Bobo found a trapped bird under a fallen branch. Bobo quickly lifted the branch with all his strength and set the bird free. The bird chirped happily and promised to help Bobo whenever he needed it.",
+                question: "Who are the main characters in the story?",
+                options: [
+                    "Bobo the rabbit and a trapped bird",
+                    "A hunter and a tiger",
+                    "A little girl and her mother",
+                    "A big bear and a rabbit"
+                ],
+                answer: 0,
+                image: ""
+            },
+            {
+                id: 3,
+                difficulty: "Easy",
+                passage: "Text Paragraph:\n'Long ago, an old lion was feeling weak and hungry. A little mouse ran past his nose. The lion caught it, but the mouse begged, 'Please spare me! I might help you one day.' The lion laughed and let it go.'",
+                question: "Which part of the narrative structure is represented in the text above?",
+                options: [
+                    "Reorientation",
+                    "Resolution",
+                    "Orientation",
+                    "Coda"
+                ],
+                answer: 2,
+                image: ""
+            },
+            {
+                id: 4,
+                difficulty: "Easy",
+                passage: "Dialog:\nAris: 'Hi Maya, why do you look so sad?'\nMaya: 'I lost my favorite pencil case in the library.'\nAris: 'Don't worry, let me help you look for it together.'",
+                question: "What does Aris offer to Maya?",
+                options: [
+                    "A new pencil case",
+                    "A helping hand to find her lost item",
+                    "A ride back home",
+                    "A book from the library"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 5,
+                difficulty: "Easy",
+                passage: "Sentence:\n'Yesterday, Sinta _____ a injured puppy on the street and took it home to care for it.'",
+                question: "Choose the correct Past Simple verb to complete the sentence:",
+                options: [
+                    "find",
+                    "finds",
+                    "found",
+                    "finding"
+                ],
+                answer: 2,
+                image: ""
+            },
+            {
+                id: 6,
+                difficulty: "Easy",
+                passage: "Story excerpt:\n'Finally, the ant reached the riverbank with the help of the dove's leaf. The ant was safe at last, and they became best friends.'",
+                question: "What part of narrative text is shown in the excerpt?",
+                options: [
+                    "Complication",
+                    "Resolution",
+                    "Orientation",
+                    "Evaluation"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 7,
+                difficulty: "Easy",
+                passage: "Text:\n'Deni and Rian have been friends for three years. They always share snacks, study together, and support each other during difficult tests.'",
+                question: "What is the primary theme of the text above?",
+                options: [
+                    "Honesty in sports",
+                    "True friendship and mutual support",
+                    "Hard work at the gym",
+                    "Travelling around the world"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 8,
+                difficulty: "Easy",
+                passage: "Sentence:\n'Suddenly, a giant wave came and swept their wooden raft away.'",
+                question: "The word 'Suddenly' in narrative text serves as a...",
+                options: [
+                    "Time connective / Action signal",
+                    "Name of a character",
+                    "Moral lesson",
+                    "Direct sentence tag"
+                ],
+                answer: 0,
+                image: ""
+            },
+            {
+                id: 9,
+                difficulty: "Easy",
+                passage: "Short Passage:\n'The lion was trapped in a heavy rope net. He roared loudly in despair.'",
+                question: "What problem (complication) did the lion face?",
+                options: [
+                    "He was hungry and cold",
+                    "He was caught in a net",
+                    "He lost his way home",
+                    "He fought with another lion"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 10,
+                difficulty: "Easy",
+                passage: "Grammar check:\n'The two friends (walk) _______ into the dark forest last Saturday.'",
+                question: "The correct past tense form for the verb in brackets is...",
+                options: [
+                    "walked",
+                    "walking",
+                    "walks",
+                    "will walk"
+                ],
+                answer: 0,
+                image: ""
+            },
+
+            // --- MEDIUM (11 - 22) ---
+            {
+                id: 11,
+                difficulty: "Medium",
+                passage: "Text 1:\n'One evening, Kevin was struggling with his English project. His classmate, Sarah, noticed his frustration. She stayed after school for an hour to explain the narrative structure to him until he understood. Thanks to Sarah's patience, Kevin passed his assignment with flying colors.'",
+                question: "Why did Sarah stay after school?",
+                options: [
+                    "She wanted to play games with Kevin",
+                    "She was waiting for her parents to pick her up",
+                    "She offered a helping hand with Kevin's project",
+                    "She was punished by the teacher"
+                ],
+                answer: 2,
+                image: ""
+            },
+            {
+                id: 12,
+                difficulty: "Medium",
+                passage: "Text 1 (Refer to Text 1 above):\n'One evening, Kevin was struggling with his English project. His classmate, Sarah, noticed his frustration. She stayed after school for an hour to explain the narrative structure to him until he understood. Thanks to Sarah's patience, Kevin passed his assignment with flying colors.'",
+                question: "What can we infer about Sarah's personality?",
+                options: [
+                    "Selfish and arrogant",
+                    "Kind-hearted and helpful",
+                    "Lazy and careless",
+                    "Quiet and fearful"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 13,
+                difficulty: "Medium",
+                passage: "Text:\n'When the storm hit the village, Budi saw his neighbor's sheep stuck in the mud. Without hesitation, Budi rushed into the heavy rain to pull the sheep out.'",
+                question: "The phrase 'Without hesitation' implies that Budi...",
+                options: [
+                    "Was scared to move",
+                    "Helped immediately and willingly",
+                    "Asked for money first",
+                    "Waited for the rain to stop"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 14,
+                difficulty: "Medium",
+                passage: "Story excerpt:\n'Two boys, Leo and Danu, were walking in the woods. Suddenly, a bear appeared. Leo quickly climbed a tree, leaving Danu on the ground. Danu lay flat, pretending to be dead. The bear sniffed Danu and left. Afterward, Danu said, 'A true friend never leaves you behind in danger.'",
+                question: "What was the main complication in the story?",
+                options: [
+                    "Danu forgot his lunch box",
+                    "A bear suddenly appeared near the boys",
+                    "Leo hurt his leg while running",
+                    "They lost their compass"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 15,
+                difficulty: "Medium",
+                passage: "Story excerpt (Refer to Q14 text above):\n'Two boys, Leo and Danu, were walking in the woods. Suddenly, a bear appeared...'",
+                question: "What is the moral lesson (coda) of the story?",
+                options: [
+                    "Always climb trees when you see bears",
+                    "True friends support each other in hard times",
+                    "Never walk in the woods alone",
+                    "Bears do not eat food"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 16,
+                difficulty: "Medium",
+                passage: "Dialog:\nLina: 'I noticed you didn't bring lunch today, Edo.'\nEdo: 'Yeah, I forgot my wallet on the table.'\nLina: 'Here, I have two sandwiches. Let's share!'",
+                question: "What value of friendship is demonstrated in the dialogue?",
+                options: [
+                    "Sharing and caring",
+                    "Competing for grades",
+                    "Borrowing money",
+                    "Keeping secrets"
+                ],
+                answer: 0,
+                image: ""
+            },
+            {
+                id: 17,
+                difficulty: "Medium",
+                passage: "Sentence:\n'Although the tortoise was slow, he kept walking step by step while the hare was sleeping under the shade.'",
+                question: "Identify the Action Verbs used in the sentence:",
+                options: [
+                    "Slow, sleeping, shade",
+                    "Walking, sleeping",
+                    "Tortoise, hare, step",
+                    "Although, while, under"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 18,
+                difficulty: "Medium",
+                passage: "Passage:\n'Rani felt terrible because she broke Mia's ruler by accident. She immediately apologized and bought Mia a new one the next morning.'",
+                question: "How was the problem resolved in the passage?",
+                options: [
+                    "Mia got angry and stopped talking to Rani",
+                    "Rani apologized and replaced the broken ruler",
+                    "Rani hid the ruler in the trash",
+                    "The teacher gave Mia a ruler"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 19,
+                difficulty: "Medium",
+                passage: "Language Features Question:\n'Once upon a time', 'Long ago', and 'One fine day' are examples of...",
+                question: "What are these phrases called in Narrative Text?",
+                options: [
+                    "Conjunctions of result",
+                    "Time phrases / Temporal expressions",
+                    "Adjectives of quality",
+                    "Direct speech markers"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 20,
+                difficulty: "Medium",
+                passage: "Text:\n'Dika didn't know how to ride a bicycle. His elder brother spent every afternoon holding the back seat until Dika could balance himself.'",
+                question: "What role did Dika's brother play?",
+                options: [
+                    "A demanding teacher",
+                    "A supportive helper",
+                    "A strict judge",
+                    "A passive spectator"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 21,
+                difficulty: "Medium",
+                passage: "Sentence:\n'The mouse deer cleverly tricked the crocodile so he could cross the deep river.'",
+                question: "What adjective best describes the mouse deer in the story?",
+                options: [
+                    "Foolish",
+                    "Greedy",
+                    "Clever / Smart",
+                    "Cruel"
+                ],
+                answer: 2,
+                image: ""
+            },
+            {
+                id: 22,
+                difficulty: "Medium",
+                passage: "Text:\n'When Tono fell off his bike and injured his knee, Galang did not leave him. He carried Tono's bag and walked him to the school clinic.'",
+                question: "What is the primary purpose of the writer in telling this story?",
+                options: [
+                    "To explain how to ride a bicycle safely",
+                    "To entertain and inspire readers about helping friends",
+                    "To describe the school clinic equipment",
+                    "To report a traffic accident"
+                ],
+                answer: 1,
+                image: ""
+            },
+
+            // --- HARD / HOTS (23 - 30) ---
+            {
+                id: 23,
+                difficulty: "Hard",
+                passage: "Story Text:\n'Farah and Kiki were best friends preparing for a painting competition. On the day of submission, Farah accidentally spilled water over her own painting. Seeing her friend crying, Kiki spent half of her remaining time helping Farah touch up the damaged painting, even though it meant Kiki had less time for her own submission.'",
+                question: "Analyze Kiki's action. What does it reveal about her priorities?",
+                options: [
+                    "She cared more about winning the prize than her friend",
+                    "She prioritized her friendship and helping Farah over her personal ambition",
+                    "She was confident that her painting was already perfect",
+                    "She wanted to delay the competition submission"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 24,
+                difficulty: "Hard",
+                passage: "Story Text (Refer to Q23 above):\n'Farah and Kiki were best friends preparing for a painting competition...'",
+                question: "What would most likely happen if Kiki had chosen to ignore Farah's accident?",
+                options: [
+                    "Farah would easily finish her painting alone",
+                    "Farah might have lost her painting and felt betrayed by her friend",
+                    "The judge would give Kiki an extra penalty",
+                    "Farah would win first place in the competition"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 25,
+                difficulty: "Hard",
+                passage: "Compare two situations:\nSituation A: A boy helps his classmate with math homework so the classmate will buy him lunch.\nSituation B: A girl stays with her sick friend at school until her parents arrive, expecting nothing in return.",
+                question: "Which situation reflects genuine 'helping hand' friendship in narratives, and why?",
+                options: [
+                    "Situation A, because help should always have a price",
+                    "Situation B, because true helping is sincere without selfish expectations",
+                    "Both are equally good examples of true friendship",
+                    "Neither, because helping friends is unnecessary"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 26,
+                difficulty: "Hard",
+                passage: "Narrative Excerpt:\n'The dark clouds gathered, and lightning struck nearby. The woodcutter was terrified. However, remembering his promise to the lost little girl, he pushed forward into the storm to find her home.'",
+                question: "How does the setting (the storm) intensify the conflict in the story?",
+                options: [
+                    "It makes the woodcutter feel sleepy",
+                    "It creates physical danger, testing the woodcutter's commitment to help",
+                    "It solves the problem automatically",
+                    "It shows that nature is always friendly"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 27,
+                difficulty: "Hard",
+                passage: "Text Paragraph:\n'Many people think friendship is just about having fun together. But when Maya lost her house in a fire, her classmate Bayu organized a fundraising campaign at school to buy her new clothes and books.'",
+                question: "What main lesson can be synthesized from Bayu's actions?",
+                options: [
+                    "Fun activities are the core of student life",
+                    "True friendship is proven through concrete actions during adversary",
+                    "Fire accidents happen frequently at school",
+                    "Students should not bring books to school"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 28,
+                difficulty: "Hard",
+                passage: "Language Evaluation:\n1. 'Once upon a time, there lived a poor cobbler.'\n2. 'He worked hard, yet he barely earned enough for bread.'\n3. 'Suddenly, a mysterious stranger dropped a bag of gold coins in his shop.'\n4. 'Therefore, cobblers should always work in the dark.'",
+                question: "Which of the four sentences ABOVE is logically OUT OF PLACE in a traditional narrative story structure?",
+                options: [
+                    "Sentence 1",
+                    "Sentence 2",
+                    "Sentence 3",
+                    "Sentence 4"
+                ],
+                answer: 3,
+                image: ""
+            },
+            {
+                id: 29,
+                difficulty: "Hard",
+                passage: "Dialog Analysis:\nSinta: 'I'm afraid to perform on stage for the English Drama.'\nTika: 'Take a deep breath. I'll be standing right in the front row cheering for you. You are not alone!'",
+                question: "What type of emotional support does Tika offer to Sinta?",
+                options: [
+                    "Financial assistance",
+                    "Encouragement and psychological presence",
+                    "Direct physical force",
+                    "Technical criticism"
+                ],
+                answer: 1,
+                image: ""
+            },
+            {
+                id: 30,
+                difficulty: "Hard",
+                passage: "Reflective Question:\nIn many narrative stories, small creatures (like ants or mice) often end up saving large creatures (like doves or lions).",
+                question: "What deeper philosophical message about 'helping others' do these stories convey?",
+                options: [
+                    "Large animals are always weaker than small animals",
+                    "No act of kindness, no matter how small or by whom, is ever wasted",
+                    "Mice and ants are superior species in nature",
+                    "Strong animals should never trust weak animals"
+                ],
+                answer: 1,
+                image: ""
+            }
+        ];
+
+        let studentData = {
+            name: "",
+            class: "",
+            score: 0,
+            correctCount: 0,
+            wrongCount: 0,
+            violations: 0,
+            wrongQuestions: []
+        };
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(questionBank.length).fill(null);
+        let timerInterval = null;
+        let timeRemaining = TOTAL_TIME_SECONDS;
+        let isGameActive = false;
+
+        // Monitoring tab switching / window blur
+        window.addEventListener("blur", handleCheatDetection);
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                handleCheatDetection();
+            }
+        });
+
+        function handleCheatDetection() {
+            if (!isGameActive) return;
+
+            studentData.violations++;
+            document.getElementById("violation-counter").innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Warnings: ${studentData.violations}/3`;
+
+            if (studentData.violations >= 3) {
+                alertModal("Security Violation!", "You have switched tabs or left the app 3 times. Your test is terminated and reset!");
+                setTimeout(() => {
+                    restartApp();
+                }, 2000);
+            } else {
+                alertModal("Warning: Tab Switch Detected!", `Please stay on the quiz page! Violation ${studentData.violations} of 3.`);
+            }
+        }
+
+        
+        function startGame() {
+            const nameInput = document.getElementById("input-name").value.trim();
+            const classInput = document.getElementById("input-class").value;
+            const passcode = document.getElementById("input-passcode").value.trim();
+
+            if (!nameInput || !classInput) {
+                alertModal("Incomplete Data", "Please enter your Full Name and select your Class!");
+                return;
+            }
+
+            if (passcode !== GAME_PASSCODE) {
+                alertModal("Incorrect Passcode", "The access passcode you entered is invalid. Ask your teacher!");
+                return;
+            }
+
+            // Save info
+            studentData.name = nameInput;
+            studentData.class = classInput;
+            studentData.violations = 0;
+            studentData.wrongQuestions = [];
+
+            document.getElementById("student-badge").innerText = `${studentData.name} (${studentData.class})`;
+            
+            // Switch screen
+            document.getElementById("screen-welcome").classList.add("hidden");
+            document.getElementById("screen-game").classList.remove("hidden");
+
+            isGameActive = true;
+            currentQuestionIndex = 0;
+            userAnswers.fill(null);
+
+            // Start Timer & Render
+            startTimer();
+            renderQuestion();
+        }
+
+        function startTimer() {
+            timeRemaining = TOTAL_TIME_SECONDS;
+            updateTimerDisplay();
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alertModal("Time is Up!", "Your 60 minutes limit has ended. Auto submitting your quiz...");
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemaining / 60);
+            const secs = timeRemaining % 60;
+            document.getElementById("time-left").innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function renderQuestion() {
+            const q = questionBank[currentQuestionIndex];
+
+            // Progress Bar
+            document.getElementById("question-progress-text").innerText = `Question ${currentQuestionIndex + 1} of ${questionBank.length}`;
+            const progressPct = ((currentQuestionIndex + 1) / questionBank.length) * 100;
+            document.getElementById("progress-bar").style.width = `${progressPct}%`;
+
+            // Difficulty Tag
+            const diffBadge = document.getElementById("difficulty-badge");
+            diffBadge.innerText = q.difficulty;
+            if (q.difficulty === "Easy") diffBadge.className = "px-2 py-0.5 rounded text-white text-[10px] uppercase font-black bg-emerald-500";
+            else if (q.difficulty === "Medium") diffBadge.className = "px-2 py-0.5 rounded text-white text-[10px] uppercase font-black bg-amber-500";
+            else diffBadge.className = "px-2 py-0.5 rounded text-white text-[10px] uppercase font-black bg-rose-500";
+
+            // Reading Text Passage
+            document.getElementById("question-text-passage").innerText = q.passage;
+
+            // Optional Image handling
+            const imgBox = document.getElementById("question-image-box");
+            const imgElem = document.getElementById("question-image");
+            if (q.image && q.image.trim() !== "") {
+                imgElem.src = q.image;
+                imgBox.classList.remove("hidden");
+            } else {
+                imgBox.classList.add("hidden");
+            }
+
+            // Question Prompt
+            document.getElementById("question-prompt").innerText = `${q.id}. ${q.question}`;
+
+            // Options Rendering
+            const optionsContainer = document.getElementById("options-container");
+            optionsContainer.innerHTML = "";
+
+            const optionLabels = ["A", "B", "C", "D"];
+            q.options.forEach((optText, optIdx) => {
+                const isSelected = userAnswers[currentQuestionIndex] === optIdx;
+                
+                const btn = document.createElement("button");
+                btn.className = `w-full text-left p-3.5 rounded-xl border-2 transition-all flex items-center space-x-3 text-sm font-medium ${
+                    isSelected 
+                        ? "border-brand-purple bg-purple-50 text-brand-purple font-bold shadow-sm" 
+                        : "border-gray-200 hover:border-purple-300 hover:bg-gray-50 text-gray-700"
+                }`;
+                btn.onclick = () => selectOption(optIdx);
+
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
+                        isSelected ? "bg-brand-purple text-white" : "bg-gray-200 text-gray-600"
+                    }">${optionLabels[optIdx]}</span>
+                    <span class="flex-1">${optText}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Nav Buttons visibility
+            document.getElementById("btn-prev").style.visibility = currentQuestionIndex === 0 ? "hidden" : "visible";
+            
+            if (currentQuestionIndex === questionBank.length - 1) {
+                document.getElementById("btn-next").classList.add("hidden");
+                document.getElementById("btn-submit").classList.remove("hidden");
+            } else {
+                document.getElementById("btn-next").classList.remove("hidden");
+                document.getElementById("btn-submit").classList.add("hidden");
+            }
+        }
+
+        function selectOption(optIndex) {
+            userAnswers[currentQuestionIndex] = optIndex;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questionBank.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function openGridModal() {
+            const gridContainer = document.getElementById("question-grid-buttons");
+            gridContainer.innerHTML = "";
+
+            questionBank.forEach((q, idx) => {
+                const isAnswered = userAnswers[idx] !== null;
+                const isCurrent = idx === currentQuestionIndex;
+
+                const btn = document.createElement("button");
+                btn.className = `p-2 rounded-xl text-xs font-bold transition border ${
+                    isCurrent 
+                        ? "ring-2 ring-brand-purple bg-purple-100 text-brand-purple border-brand-purple" 
+                        : isAnswered 
+                            ? "bg-emerald-500 text-white border-emerald-600" 
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200 border-gray-300"
+                }`;
+                btn.innerText = idx + 1;
+                btn.onclick = () => {
+                    currentQuestionIndex = idx;
+                    renderQuestion();
+                    closeGridModal();
+                };
+                gridContainer.appendChild(btn);
+            });
+
+            document.getElementById("modal-grid").classList.remove("hidden");
+        }
+
+        function closeGridModal() {
+            document.getElementById("modal-grid").classList.add("hidden");
+        }
+
+        function confirmSubmit() {
+            const unanswered = userAnswers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                if (!confirm(`You still have ${unanswered} unanswered question(s). Are you sure you want to finish?`)) {
+                    return;
+                }
+            }
+            finishQuiz();
+        }
+
+        function finishQuiz() {
+            isGameActive = false;
+            clearInterval(timerInterval);
+
+            // Calculate score
+            let correct = 0;
+            let wrong = 0;
+            let wrongList = [];
+
+            questionBank.forEach((q, idx) => {
+                if (userAnswers[idx] === q.answer) {
+                    correct++;
+                } else {
+                    wrong++;
+                    wrongList.push(q.id);
+                }
+            });
+
+            const totalScore = Math.round((correct / questionBank.length) * 100);
+
+            studentData.score = totalScore;
+            studentData.correctCount = correct;
+            studentData.wrongCount = wrong;
+            studentData.wrongQuestions = wrongList;
+
+            // Render result UI
+            document.getElementById("result-score").innerText = totalScore;
+            document.getElementById("result-correct").innerText = correct;
+            document.getElementById("result-wrong").innerText = wrong;
+            document.getElementById("result-violations").innerText = studentData.violations;
+
+            document.getElementById("result-wrong-list").innerText = wrongList.length > 0 
+                ? `Questions Number: ${wrongList.join(", ")}` 
+                : "None! Perfect Score!";
+
+            document.getElementById("screen-game").classList.add("hidden");
+            document.getElementById("screen-result").classList.remove("hidden");
+
+            // Send to GAS
+            sendDataToGAS();
+        }
+
+        function sendDataToGAS() {
+            const statusElem = document.getElementById("gas-status");
+
+            if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL.includes("ISI_URL_GOOGLE_APPS_SCRIPT_ANDA")) {
+                statusElem.innerText = "⚠️ Google Sheet Sync: GAS URL is not configured by teacher.";
+                statusElem.className = "text-xs text-amber-600 font-semibold";
+                return;
+            }
+
+            statusElem.innerText = "⏳ Saving score to Google Sheets...";
+
+            const payload = {
+                timestamp: new Date().toLocaleString("id-ID"),
+                nama: studentData.name,
+                kelas: studentData.class,
+                benar: studentData.correctCount,
+                salah: studentData.wrongCount,
+                skorAkhir: studentData.score,
+                jumlahPelanggaran: studentData.violations,
+                noSoalSalah: studentData.wrongQuestions.join(", ") || "-"
+            };
+
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors", // Bypass CORS restrictions for Google Apps Script Web App
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                statusElem.innerText = "✅ Result successfully saved to Google Sheets!";
+                statusElem.className = "text-xs text-emerald-600 font-bold";
+            })
+            .catch(err => {
+                console.error("GAS Error:", err);
+                statusElem.innerText = "❌ Failed to send result to Google Sheets.";
+                statusElem.className = "text-xs text-red-500 font-semibold";
+            });
+        }
+
+        function alertModal(title, message) {
+            document.getElementById("modal-alert-title").innerText = title;
+            document.getElementById("modal-alert-msg").innerText = message;
+            document.getElementById("modal-alert").classList.remove("hidden");
+        }
+
+        function closeAlertModal() {
+            document.getElementById("modal-alert").classList.add("hidden");
+        }
+
+        function restartApp() {
+            clearInterval(timerInterval);
+            isGameActive = false;
+            document.getElementById("input-name").value = "";
+            document.getElementById("input-passcode").value = "";
+            
+            document.getElementById("screen-result").classList.add("hidden");
+            document.getElementById("screen-game").classList.add("hidden");
+            document.getElementById("screen-welcome").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
